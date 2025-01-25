@@ -34,7 +34,7 @@ export async function exponentialBackoffRetryIterative<T>(
 ): Promise<T> {
   let attempt = 0
 
-  while (attempt < retries) {
+  while (attempt <= retries) {
     if (signal?.aborted) {
       throw new Error('Operation aborted')
     }
@@ -43,7 +43,7 @@ export async function exponentialBackoffRetryIterative<T>(
       return await asyncFunction()
     } catch (error) {
       attempt++
-      if (attempt >= retries) {
+      if (attempt > retries) {
         throw error
       }
       await wait(delay * Math.pow(2, attempt))
